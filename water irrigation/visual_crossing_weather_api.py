@@ -9,7 +9,7 @@ LOCATION = (18.611134, 73.759569)  # Tathwade
 class VisualCrossingAPI:
 
     def __init__(self) -> None:
-        """ As of right now we can get data for different location using name of place  """
+        """ As of right now we can get data for different location using name of place we can also use lat,long """
         self.filename = "current_weather.json"
         self.__endpoint_forecast_hourly = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/pune?unitGroup=us&key=5EFS2W483U3M4U2423H758CN5&contentType=json"
         self.__endpoint_forecast_daily = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/pune?unitGroup=us&include=days&key=5EFS2W483U3M4U2423H758CN5&contentType=json"

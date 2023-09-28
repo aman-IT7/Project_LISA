@@ -20,8 +20,8 @@ class VisualCrossingAPI:
         try:
             response = requests.get(url=self.__endpoint_forecast_hourly)
             if response.status_code == 200:
-                with open("visualJSON_debug.json", "w") as file:
-                    file.write(response.text)
+                # with open("visualJSON_debug.json", "w") as file:
+                #     file.write(response.text)
                 return response.json()["days"]
             else:
                 raise Exception("ERROR OCCURED")
@@ -33,10 +33,9 @@ class VisualCrossingAPI:
         try:
             response = requests.get(url=self.__endpoint_forecast_daily)
             if response.status_code == 200:
-                with open("visualJSON_debug.json", "w") as file:
-                    file.write(response.text)
 
                 data = response.json()["days"]
+
                 return data
             else:
                 raise Exception("ERROR OCCURED")
@@ -48,12 +47,12 @@ class VisualCrossingAPI:
         try:
             response = requests.get(self.__endpoint_today)
             if response.status_code == 200:
-                with open("current_weather.json", 'w') as file:
-                    data = response.json()
-                    final_data = json.dumps(data['days'][0])
-                    file.write(final_data)
+                data = response.json()
+                # with open("current_weather.json", 'w') as file:
+                #     final_data = json.dumps(data['days'][0])
+                #     file.write(final_data)
 
-                return data
+                return data['days'][0]
             else:
                 raise Exception(response.status_code)
 

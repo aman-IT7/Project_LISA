@@ -7,9 +7,8 @@ LOCATION = (18.611134, 73.759569)  # Tathwade
 
 
 class VisualCrossingAPI:
-
     def __init__(self) -> None:
-        """ As of right now we can get data for different location using name of place we can also use lat,long """
+        """As of right now we can get data for different location using name of place we can also use lat,long"""
         self.filename = "current_weather.json"
         self.__endpoint_forecast_hourly = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/pune?unitGroup=us&key=5EFS2W483U3M4U2423H758CN5&contentType=json"
         self.__endpoint_forecast_daily = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/pune?unitGroup=us&include=days&key=5EFS2W483U3M4U2423H758CN5&contentType=json"
@@ -33,7 +32,6 @@ class VisualCrossingAPI:
         try:
             response = requests.get(url=self.__endpoint_forecast_daily)
             if response.status_code == 200:
-
                 data = response.json()["days"]
 
                 return data
@@ -42,8 +40,10 @@ class VisualCrossingAPI:
         except Exception as e:
             raise e
 
-    def getData_current_weather(self,) -> dict:
-        """ Retrives current weather (Todays) weather data """
+    def getData_current_weather(
+        self,
+    ) -> dict:
+        """Retrives current weather (Todays) weather data"""
         try:
             response = requests.get(self.__endpoint_today)
             if response.status_code == 200:
@@ -52,7 +52,7 @@ class VisualCrossingAPI:
                 #     final_data = json.dumps(data['days'][0])
                 #     file.write(final_data)
 
-                return data['days'][0]
+                return data["days"][0]
             else:
                 raise Exception(response.status_code)
 

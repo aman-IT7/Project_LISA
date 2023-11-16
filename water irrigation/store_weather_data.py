@@ -1,3 +1,6 @@
+""" This module is used to store data loaclly in mongoDB """
+
+
 import pymongo
 import visual_crossing_weather_api
 

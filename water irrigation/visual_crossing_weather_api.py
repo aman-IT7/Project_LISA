@@ -1,3 +1,6 @@
+""" This module will be used to gather data on-site and then upload it using MQTT to our cloud daatbase """
+
+
 import requests
 import json
 

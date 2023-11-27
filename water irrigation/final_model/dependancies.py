@@ -45,6 +45,7 @@ class MoiturePrediction:
         )
         self.model = tf.keras.models.load_model("water irrigation/final_model/zeus.h5")
         self.mlrModel = joblib.load("water irrigation/final_model/mlrmodel.bin")
+        self.dtrModel = joblib.load("water irrigation/final_model/dtr.bin")
         self.preProcessData()
 
     def preProcessData(self):
@@ -65,7 +66,7 @@ dataset.drop(UNWANTED_PARAMS, inplace=True, axis=1)
 dataset.dropna(inplace=True)
 dataset = dataset.iloc[:, 1:]
 
-data1 = dataset.iloc[2875:2876, :]
+data1 = dataset.iloc[0, :]
 print(data1)
 print(data1.shape)
 

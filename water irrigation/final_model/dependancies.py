@@ -45,10 +45,10 @@ class MoiturePrediction:
         self.rawData = data
         self.processedData = self.__preProcessData(data)
         self.predictedMoisture = self.dtrModel.predict(self.processedData)
-        self.pushToDatabase()
+        self.__pushToDatabase()
         return self.predictedMoisture
 
-    def pushToDatabase(self):
+    def __pushToDatabase(self):
         self.rawData["SM_4"] = self.predictedMoisture
         self.rawData = self.rawData[COLUMN_ORDER]
         self.toSend = json.loads(self.rawData.to_json(orient="records", indent=4))[0]

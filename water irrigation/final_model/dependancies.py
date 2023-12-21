@@ -5,10 +5,9 @@ from publisher import *
 import json
 
 
-COLUMN_TRANSFORMER_FILE = (
-    "water irrigation/final_model/moisture_pred_columntranformer.joblib"
-)
-SCALAR_FILE = "water irrigation/final_model/moisture_pred_minmaxscalar.joblib"
+COLUMN_TRANSFORMER_FILE = "C:/Users/ganes/OneDrive/Documents/GitHub/Project_LISA/water irrigation/final_model/moisture_pred_columntranformer.joblib"
+
+SCALAR_FILE = "C:/Users/ganes/OneDrive/Documents/GitHub/Project_LISA/water irrigation/final_model/moisture_pred_minmaxscalar.joblib"
 MODEL_FILE = "C:/Users/ganes/OneDrive/Documents/GitHub/Project_LISA/water irrigation/final_model/dtr.bin"
 # column order for sending it to database
 COLUMN_ORDER = [

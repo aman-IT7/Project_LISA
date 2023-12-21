@@ -1,7 +1,7 @@
 from paho.mqtt import client as mqtt_client
 import time
 
-MQTT_BROKER = "broker.hivemq.com"
+MQTT_BROKER = "192.168.210.55"
 MQTT_PORT = 1883
 
 

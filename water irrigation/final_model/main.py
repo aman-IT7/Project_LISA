@@ -1,35 +1,37 @@
 import pandas as pd
 from dependancies import *
 from io import StringIO
+from VisualCrossingAPI import *
 
-json_input = StringIO(input())
+# json_input = StringIO(input())
 
 # sample data to test
 # test = """ {"ST_4": 30.4, "temp": 40.0, "humidity": 70.27, "precip": 0.0, "windspeed": 10.7, "cloudcover": 50.2, "conditions": "Clear"} """
+# weather_data = pd.read_json(json_input, orient="index").T
 
-weather_data = pd.read_json(json_input, orient="index").T
-
-
-predicted_moisture = MoiturePrediction().Predict(weather_data)
-print(predicted_moisture)
+predicted_moisture = MoiturePrediction()
+weather_api = VisualCrossingAPI()
 
 
-"""
-final stats:
+def weather_data(time: int):
+    """get weather data"""
+    weather_data = weather_api.getData_current_weather()[time]
+    return json.dumps(weather_data)
 
-ANN:
-    mean absolute error =  3.0655832
-    mean Squared error =  13.80442
 
-MLR:
-    mean absolute error = 3.027409
-    mean Squared error =  13.826493
+def format_weather_data(weather_data):
+    COLUMN_ORDER_WEATHER = [
+        "temp",
+        "humidity",
+        "precip",
+        "windspeed",
+        "cloudcover",
+        "conditions",
+    ]
+    pd_data = pd.read_json(weather_data)
+    formatted_data = pd_data[COLUMN_ORDER_WEATHER]
+    return formatted_data
 
-DTR:
-    DTR MAE: 2.4106774283905894
-    DTR MSE: 11.722721501863939
 
-SVR:
-    mean_absolute_error =  2.904093050843496
-    mean_squared_error =  13.453183997821128
-"""
+wd = weather_data(1)
+print(format_weather_data(wd))

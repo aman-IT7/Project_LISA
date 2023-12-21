@@ -72,3 +72,24 @@ def load_preproccess_scale_transform(csv_filepath):
     X_train, X_test = map(lambda x: x.astype("float32"), [X_train, X_test])
 
     return (X_train, y_train), (X_test, y_test)
+
+
+"""
+final stats:
+
+ANN:
+    mean absolute error =  3.0655832
+    mean Squared error =  13.80442
+
+MLR:
+    mean absolute error = 3.027409
+    mean Squared error =  13.826493
+
+DTR:
+    DTR MAE: 2.4106774283905894
+    DTR MSE: 11.722721501863939
+
+SVR:
+    mean_absolute_error =  2.904093050843496
+    mean_squared_error =  13.453183997821128
+"""

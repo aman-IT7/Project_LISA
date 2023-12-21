@@ -1,7 +1,8 @@
 from paho.mqtt import client as mqtt_client
 import time
 
-MQTT_BROKER = "192.168.210.55"
+MQTT_BROKER_LOCAL = "192.168.210.55"
+MQTT_BROKER_PUBLIC = "broker.hivemq.com"
 MQTT_PORT = 1883
 
 
@@ -27,7 +28,7 @@ def create_mqtt_client(broker, port, debug):
 
 def publish(client, msg, topic):
     time.sleep(1)
-    result = client.publish(topic, msg)
+    result = client.publish(topic, msg, retain=False)
     status = result[0]
     if status == 0:
         print(f"Sent {msg} to topic {topic}")
@@ -36,6 +37,6 @@ def publish(client, msg, topic):
 
 
 def send_message(data, topic, debug=False):
-    client = create_mqtt_client(MQTT_BROKER, MQTT_PORT, debug)
+    client = create_mqtt_client(MQTT_BROKER_PUBLIC, MQTT_PORT, debug)
     client.loop_start()
     publish(client, data, topic)

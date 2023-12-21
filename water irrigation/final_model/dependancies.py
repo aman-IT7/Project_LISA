@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import joblib
-from publisher import *
+from mqtt_publisher import *
 import json
 
 
@@ -53,4 +53,4 @@ class MoiturePrediction:
         self.rawData = self.rawData[COLUMN_ORDER]
         self.toSend = json.loads(self.rawData.to_json(orient="records", indent=4))[0]
         self.toSend = json.dumps(self.toSend)
-        send_message(self.toSend, "test69")
+        send_message(self.toSend, "testLISA")

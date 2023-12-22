@@ -78,18 +78,27 @@ def load_preproccess_scale_transform(csv_filepath):
 final stats:
 
 ANN:
-    mean absolute error =  3.0655832
-    mean Squared error =  13.80442
+mean absolute error =  2.7642505
+mean Squared error =  12.538361
+r2 score =  0.5531061989040525
 
 MLR:
-    mean absolute error = 3.027409
-    mean Squared error =  13.826493
+mean absolute error =  3.0007312
+mean Squared error =  13.922258
+r2 score =  0.5037810939457144
 
 DTR:
-    DTR MAE: 2.4106774283905894
-    DTR MSE: 11.722721501863939
+mean absolute error =  2.331529393480891
+mean Squared error =  11.3697717310569
+r2 score =  0.5947571586724782
 
-SVR:
-    mean_absolute_error =  2.904093050843496
-    mean_squared_error =  13.453183997821128
+GBR:
+mean_absolute_error =  2.363851262976407
+mean_squared_error =  9.592090653980751
+r2 score =  0.6581174923439743
+
+ENSMBLE:
+mean_absolute_error =  2.247974397289292
+mean_squared_error =  9.338614744098383
+r2 score =  0.6671519127667017
 """

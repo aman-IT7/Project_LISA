@@ -8,6 +8,9 @@ import os
 COLUMN_TRANSFORMER_FILE = "C:/Users/ganes/OneDrive/Documents/GitHub/Project_LISA/water irrigation/final_model/moisture_pred_columntranformer.joblib"
 
 SCALAR_FILE = "C:/Users/ganes/OneDrive/Documents/GitHub/Project_LISA/water irrigation/final_model/moisture_pred_minmaxscalar.joblib"
+
+DTR_MODEL = "C:/Users/ganes/OneDrive/Documents/GitHub/Project_LISA/water irrigation/final_model/models/dtr.bin"
+GBR_MODEL = "C:/Users/ganes/OneDrive/Documents/GitHub/Project_LISA/water irrigation/final_model/models/GBR.bin"
 # column order for sending it to database
 COLUMN_ORDER = [
     "SM_4",
@@ -21,21 +24,6 @@ COLUMN_ORDER = [
 ]
 
 
-model_directory = "C:/Users/ganes/OneDrive/Documents/GitHub/Project_LISA/water irrigation/final_model/models"
-
-m_list = []
-
-for mdl in os.listdir(model_directory):
-    try:
-        model_path = os.path.join(model_directory, mdl)
-        model = joblib.load(model_path)
-        m_list.append(model)
-    except FileNotFoundError as e:
-        print(f"File not found: {mdl}")
-    except Exception as e:
-        print(f"Error loading model {mdl}: {e}")
-
-
 class MoiturePrediction:
     def __init__(self) -> None:
         """Loading columnTransformer, MinMaxScalar, Model and taking user input"""
@@ -43,6 +31,9 @@ class MoiturePrediction:
         self.predictedMoisture = None
         self.ct = joblib.load(COLUMN_TRANSFORMER_FILE)
         self.scalar = joblib.load(SCALAR_FILE)
+        self.MqttPublisher = MqttPublisher()
+        self.dtr = joblib.load(DTR_MODEL)
+        self.gbr = joblib.load(GBR_MODEL)
 
     def __preProcessData(self, data: pd.DataFrame):
         """converts pd.series data to numpy with columnTransformation, MinMaxScalar"""
@@ -57,8 +48,9 @@ class MoiturePrediction:
     def Predict(self, data: pd.DataFrame):
         self.rawData = data
         self.processedData = self.__preProcessData(data)
-        self.model_predictions = [model.predict(self.processedData) for model in m_list]
-        self.predictedMoisture = np.mean(self.model_predictions)
+        self.predictedMoisture = (
+            self.dtr.predict(self.processedData) + self.gbr.predict(self.processedData)
+        ) / 2
         self.__pushToDatabase()
         return self.predictedMoisture
 
@@ -67,4 +59,4 @@ class MoiturePrediction:
         self.rawData = self.rawData[COLUMN_ORDER]
         self.toSend = json.loads(self.rawData.to_json(orient="records", indent=4))[0]
         self.toSend = json.dumps(self.toSend)
-        send_message(self.toSend, "test69")
+        self.MqttPublisher.send_message(self.toSend, "test69")

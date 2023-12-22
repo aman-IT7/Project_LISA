@@ -7,7 +7,7 @@ from VisualCrossingAPI import *
 
 # sample data to test
 # test = """ {"ST_4": 30.4, "temp": 40.0, "humidity": 70.27, "precip": 0.0, "windspeed": 10.7, "cloudcover": 50.2, "conditions": "Clear"} """
-# weather_data = pd.read_json(json_input, orient="index").T
+# weather_data = pd.read_json(test, orient="index").T
 
 predicted_moisture = MoiturePrediction()
 weather_api = VisualCrossingAPI()
@@ -33,5 +33,5 @@ def format_weather_data(weather_data):
     return formatted_data
 
 
-wd = weather_data(1)
-print(format_weather_data(wd))
+# wd = weather_data(1)
+# print(format_weather_data(wd))

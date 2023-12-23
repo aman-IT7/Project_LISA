@@ -4,6 +4,7 @@ import paho.mqtt.client as mqtt
 from mqtt_subscriber import MqttClient
 from VisualCrossingAPI import *
 import paho.mqtt.client as mqtt
+from datetime import datetime
 
 MQTT_BROKER_LOCAL = "192.168.210.55"
 MQTT_BROKER_PUBLIC = "broker.hivemq.com"
@@ -29,10 +30,10 @@ class MqttClient:
         print(f"Received message: {msg.payload.decode()} on topic {msg.topic}")
         self.last_msg = json.loads(msg.payload.decode())
         try:
-            print("test")
             node_data = rm.get_last_msg()
             if node_data:
-                wd = get_weather_data(23)
+                current_hr = datetime.now().hour
+                wd = get_weather_data((current_hr + 3) % 23)
                 wd = format_weather_data(wd)
                 nd = format_node_data(node_data)
                 final_data = final_format(nd, wd)

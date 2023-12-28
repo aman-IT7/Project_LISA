@@ -3,7 +3,6 @@ import pandas as pd
 import joblib
 from mqtt_publisher import *
 import json
-import os
 
 COLUMN_TRANSFORMER_FILE = "C:/Users/ganes/OneDrive/Documents/GitHub/Project_LISA/water irrigation/final_model/moisture_pred_columntranformer.joblib"
 

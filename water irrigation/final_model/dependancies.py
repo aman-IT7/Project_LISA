@@ -8,11 +8,11 @@ COLUMN_TRANSFORMER_FILE = "C:/Users/ganes/OneDrive/Documents/GitHub/Project_LISA
 
 SCALAR_FILE = "C:/Users/ganes/OneDrive/Documents/GitHub/Project_LISA/water irrigation/final_model/moisture_pred_minmaxscalar.joblib"
 
-DTR_MODEL = "C:/Users/ganes/OneDrive/Documents/GitHub/Project_LISA/water irrigation/final_model/models/dtr.bin"
-GBR_MODEL = "C:/Users/ganes/OneDrive/Documents/GitHub/Project_LISA/water irrigation/final_model/models/GBR.bin"
+DTR_MODEL = "C:/Users/ganes/OneDrive/Documents/GitHub/Project_LISA/water irrigation/final_model/dtr.bin"
 # column order for sending it to database
 COLUMN_ORDER = [
     "SM_4",
+    "SM_INI",
     "ST_4",
     "temp",
     "humidity",
@@ -32,7 +32,6 @@ class MoiturePrediction:
         self.scalar = joblib.load(SCALAR_FILE)
         self.MqttPublisher = MqttPublisher()
         self.dtr = joblib.load(DTR_MODEL)
-        self.gbr = joblib.load(GBR_MODEL)
 
     def __preProcessData(self, data: pd.DataFrame):
         """converts pd.series data to numpy with columnTransformation, MinMaxScalar"""
@@ -47,9 +46,7 @@ class MoiturePrediction:
     def Predict(self, data: pd.DataFrame):
         self.rawData = data
         self.processedData = self.__preProcessData(data)
-        self.predictedMoisture = (
-            self.dtr.predict(self.processedData) + self.gbr.predict(self.processedData)
-        ) / 2
+        self.predictedMoisture = self.dtr.predict(self.processedData)
         self.__pushToDatabase()
         return self.predictedMoisture
 

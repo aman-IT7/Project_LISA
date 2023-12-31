@@ -29,13 +29,13 @@ class MainLoop:
         print(f"Received message: {msg.payload.decode()} on topic {msg.topic}")
         self.last_msg = json.loads(msg.payload.decode())
         try:
-            node_data = self.get_last_msg()
+            node_data = self.__get_last_msg()
             if node_data:
                 current_hr = datetime.now().hour
-                wd = self.get_weather_data((current_hr + 3) % 23)
-                wd = self.format_weather_data(wd)
-                nd = self.format_node_data(node_data)
-                final_data = self.final_format(nd, wd)
+                wd = self.__get_weather_data((current_hr + 3) % 23)
+                wd = self.__format_weather_data(wd)
+                nd = self.__format_node_data(node_data)
+                final_data = self.__final_format(nd, wd)
                 print(final_data)
                 p_moisture = self.moisturePredictionModel.Predict(final_data)
                 print(p_moisture)
@@ -46,18 +46,18 @@ class MainLoop:
         self.client.connect(self.broker_address, self.port, 60)
         self.client.loop_forever()
 
-    def get_last_msg(self):
+    def __get_last_msg(self):
         return self.last_msg
 
     def disconnect(self):
         self.client.disconnect()
 
-    def get_weather_data(self, time: int):
+    def __get_weather_data(self, time: int):
         """get weather data"""
         weather_data = self.weatherApi.getData_current_weather()[time]
         return weather_data
 
-    def format_weather_data(self, weather_data: json):
+    def __format_weather_data(self, weather_data: json):
         COLUMN_ORDER_WEATHER = [
             "precip",
             "windspeed",
@@ -68,7 +68,7 @@ class MainLoop:
         formatted_data = pd_data[COLUMN_ORDER_WEATHER]
         return formatted_data
 
-    def format_node_data(self, node_data):
+    def __format_node_data(self, node_data):
         COLUMN_ORDER_NODE = ["SoilTemp", "AmbientTemp", "AmbientHumidity"]
         data = pd.DataFrame(node_data, index=[0])
         formatted_data = data[COLUMN_ORDER_NODE]
@@ -82,7 +82,7 @@ class MainLoop:
         )
         return formatted_data
 
-    def final_format(
+    def __final_format(
         self, node_data: pd.DataFrame, weather_data: pd.DataFrame
     ) -> pd.DataFrame:
         return pd.concat([node_data, weather_data], axis=1)

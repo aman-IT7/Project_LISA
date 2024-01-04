@@ -31,11 +31,11 @@ class MainLoop:
         try:
             node_data = self.__get_last_msg()
             if node_data:
-                current_hr = datetime.now().hour
-                wd = self.__get_weather_data((current_hr + 3) % 23)
-                wd = self.__format_weather_data(wd)
-                nd = self.__format_node_data(node_data)
-                final_data = self.__final_format(nd, wd)
+                predictionTime = (datetime.now().hour + 3) % 23
+                weatherData = self.__get_weather_data(predictionTime)
+                formatedWeatherData = self.__format_weather_data(weatherData)
+                formatedNodeData = self.__format_node_data(node_data)
+                final_data = self.__final_format(formatedNodeData, formatedWeatherData)
                 print(final_data)
                 p_moisture = self.moisturePredictionModel.Predict(final_data)
                 print(p_moisture)
@@ -69,11 +69,17 @@ class MainLoop:
         return formatted_data
 
     def __format_node_data(self, node_data):
-        COLUMN_ORDER_NODE = ["SoilTemp", "AmbientTemp", "AmbientHumidity"]
+        COLUMN_ORDER_NODE = [
+            "SoilMoisture",
+            "SoilTemp",
+            "AmbientTemp",
+            "AmbientHumidity",
+        ]
         data = pd.DataFrame(node_data, index=[0])
         formatted_data = data[COLUMN_ORDER_NODE]
         formatted_data.rename(
             columns={
+                "SoilMoisture": "SM_INI",
                 "SoilTemp": "ST_4",
                 "AmbientTemp": "temp",
                 "AmbientHumidity": "humidity",

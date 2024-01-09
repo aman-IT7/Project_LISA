@@ -52,6 +52,7 @@ class MoiturePrediction:
 
     def __pushToDatabase(self):
         self.rawData["SM_4"] = self.predictedMoisture
+        self.rawData.drop("SM_INI", inplace=True)
         self.rawData = self.rawData[COLUMN_ORDER]
         self.toSend = json.loads(self.rawData.to_json(orient="records", indent=4))[0]
         self.toSend = json.dumps(self.toSend)

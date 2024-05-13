@@ -1,10 +1,9 @@
 """ This module is used to store data loaclly in mongoDB """
 
-
 import pymongo
-import visual_crossing_weather_api
+from final_model import VisualCrossingAPI
 
-weatherAPI = visual_crossing_weather_api.VisualCrossingAPI()
+weatherAPI = VisualCrossingAPI.VisualCrossingAPI()
 file_name = weatherAPI.filename
 mongoClient = pymongo.MongoClient("mongodb://localhost:27017")
 

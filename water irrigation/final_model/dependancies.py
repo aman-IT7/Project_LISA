@@ -24,8 +24,8 @@ COLUMN_ORDER = [
 
 
 class MoiturePrediction:
+
     def __init__(self) -> None:
-        """Loading columnTransformer, MinMaxScalar, Model and taking user input"""
         self.rawData = None
         self.predictedMoisture = None
         self.ct = joblib.load(COLUMN_TRANSFORMER_FILE)
@@ -43,13 +43,6 @@ class MoiturePrediction:
         self.data = np.asarray(self.data).astype("float32")
         return self.data
 
-    def Predict(self, data: pd.DataFrame):
-        self.rawData = data
-        self.processedData = self.__preProcessData(data)
-        self.predictedMoisture = self.dtr.predict(self.processedData)
-        self.__pushToDatabase()
-        return self.predictedMoisture
-
     def __pushToDatabase(self):
         self.rawData["SM_4"] = self.predictedMoisture
         self.rawData.drop("SM_INI", inplace=True)
@@ -57,3 +50,10 @@ class MoiturePrediction:
         self.toSend = json.loads(self.rawData.to_json(orient="records", indent=4))[0]
         self.toSend = json.dumps(self.toSend)
         self.MqttPublisher.send_message(self.toSend, "test69")
+
+    def predictMositure(self, data: pd.DataFrame):
+        self.rawData = data
+        self.processedData = self.__preProcessData(data)
+        self.predictedMoisture = self.dtr.predict(self.processedData)
+        self.__pushToDatabase()
+        return self.predictedMoisture

@@ -11,7 +11,7 @@ ENDPOINT_FORECAST_DAILY = "https://weather.visualcrossing.com/VisualCrossingWebS
 ENDPOINT_TODAY = "https://weather.visualcrossing.com/VisualCrossingWebServices/rest/services/timeline/tathawade/today?unitGroup=metric&include=hours&key=5EFS2W483U3M4U2423H758CN5&contentType=json"
 
 
-class VisualCrossingAPI:
+class VisualCrossingAPI_:
     def getData_forecast_15_perhour(self) -> dict:
         """gets hourly forecast of next 15 days"""
         try:

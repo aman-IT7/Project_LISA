@@ -1,12 +1,11 @@
 from dependancies import *
-from newMainLoop import MainLoop_
-from MainLoop import MainLoop
 from VisualCrossingAPI import *
-
+from MainLoop import MainLoop
+import newMainLoop
 
 if __name__ == "__main__":
     # moisturePredictionModel = MoiturePrediction()
-    # weatherApi = VisualCrossingAPI()
+    # weatherApi = VisualCrossingAPI_()
     # ml = MainLoop(moisturePredictionModel, weatherApi)
     # ml.connect_predict()
-    MainLoop_().connectPredict()
+    newMainLoop.MainLoop_().connectPredict()

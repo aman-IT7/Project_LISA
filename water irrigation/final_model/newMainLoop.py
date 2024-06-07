@@ -1,32 +1,19 @@
-import datetime, json, pandas as pd
-from paho.mqtt.client import _UserData, Client
-from VisualCrossingAPI import VisualCrossingAPI
+import datetime
+import json
+import pandas as pd
+from paho.mqtt.client import Client
+from VisualCrossingAPI import VisualCrossingAPI_
 from dependancies import MoiturePrediction
 
 
-class MainLoop_(Client, VisualCrossingAPI, MoiturePrediction):
+class MainLoop_(Client, VisualCrossingAPI_, MoiturePrediction):
     MQTT_BROKER_LOCAL = "192.168.210.55"
     MQTT_BROKER_PUBLIC = "broker.hivemq.com"
     MQTT_PORT = 1883
     TOPIC = "/node/id"
 
-    def __init__(
-        self,
-        client_id: str | None = "",
-        clean_session: bool | None = None,
-        userdata: _UserData | None = None,
-        protocol: int = 4,
-        transport: str = "tcp",
-        reconnect_on_failure: bool = True,
-    ) -> None:
-        super().__init__(
-            client_id,
-            clean_session,
-            userdata,
-            protocol,
-            transport,
-            reconnect_on_failure,
-        )
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
     def on_connect(self, client, userdata, flags, rc):
         # This callback function is called when we establish connection using connectPredict
@@ -48,7 +35,8 @@ class MainLoop_(Client, VisualCrossingAPI, MoiturePrediction):
                 ) % 23  # current hour + 3hrs and then moding it with 23 so it remains in 24hr timeformat and dosent exceed 24+
                 formatedWeatherData = self._get_weather_data(predictionTime)
                 formatedNodeData = self.__format_node_data(node_data)
-                final_data = self.__final_format(formatedNodeData, formatedWeatherData)
+                final_data = self.__final_format(
+                    formatedNodeData, formatedWeatherData)
                 print(final_data)
                 p_moisture = self.predictMositure(final_data)
                 print(p_moisture)

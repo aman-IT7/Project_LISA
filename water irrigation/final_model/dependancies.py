@@ -4,11 +4,13 @@ import joblib
 from mqtt_publisher import *
 import json
 
-COLUMN_TRANSFORMER_FILE = "C:/Users/ganes/OneDrive/Documents/GitHub/Project_LISA/water irrigation/final_model/moisture_pred_columntranformer.joblib"
+COLUMN_TRANSFORMER_FILE = "final_model/moisture_pred_columntranformer.joblib"
 
-SCALAR_FILE = "C:/Users/ganes/OneDrive/Documents/GitHub/Project_LISA/water irrigation/final_model/moisture_pred_minmaxscalar.joblib"
+SCALAR_FILE = "final_model/moisture_pred_minmaxscalar.joblib"
 
 DTR_MODEL = "C:/Users/ganes/OneDrive/Documents/GitHub/Project_LISA/water irrigation/final_model/dtr.bin"
+
+GBR_MODEL = "C:/Users/ganes/OneDrive/Documents/GitHub/Project_LISA/water irrigation/final_model/models/GBR.bin"
 # column order for sending it to database
 COLUMN_ORDER = [
     "SM_4",
@@ -28,15 +30,16 @@ class MoiturePrediction:
     def __init__(self) -> None:
         self.rawData = None
         self.predictedMoisture = None
-        self.ct = joblib.load(COLUMN_TRANSFORMER_FILE)
+        self.column_transformer = joblib.load(COLUMN_TRANSFORMER_FILE)
         self.scalar = joblib.load(SCALAR_FILE)
         self.MqttPublisher = MqttPublisher()
-        self.dtr = joblib.load(DTR_MODEL)
+        self.gbr = joblib.load(GBR_MODEL)
+        self.topic = "/node/api"
 
-    def __preProcessData(self, data: pd.DataFrame):
+    def _preProcessData(self, data: pd.DataFrame):
         """converts pd.series data to numpy with columnTransformation, MinMaxScalar"""
         COLUMN_START_INDEX = 9
-        self.data = self.ct.transform(data.values)
+        self.data = self.column_transformer.transform(data.values)
         self.data[:, COLUMN_START_INDEX:] = self.scalar.transform(
             self.data[:, COLUMN_START_INDEX:]
         )
@@ -45,15 +48,15 @@ class MoiturePrediction:
 
     def __pushToDatabase(self):
         self.rawData["SM_4"] = self.predictedMoisture
-        self.rawData.drop("SM_INI", inplace=True)
         self.rawData = self.rawData[COLUMN_ORDER]
-        self.toSend = json.loads(self.rawData.to_json(orient="records", indent=4))[0]
+        self.toSend = json.loads(
+            self.rawData.to_json(orient="records", indent=4))[0]
         self.toSend = json.dumps(self.toSend)
-        self.MqttPublisher.send_message(self.toSend, "test69")
+        self.MqttPublisher.send_message(self.toSend, self.topic)
 
     def predictMositure(self, data: pd.DataFrame):
         self.rawData = data
-        self.processedData = self.__preProcessData(data)
-        self.predictedMoisture = self.dtr.predict(self.processedData)
+        self.processedData = self._preProcessData(data)
+        self.predictedMoisture = self.gbr.predict(self.processedData)
         self.__pushToDatabase()
         return self.predictedMoisture

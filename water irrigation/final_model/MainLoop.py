@@ -1,7 +1,7 @@
 import paho.mqtt.client as mqtt
 import json
-import datetime
 import pandas as pd
+from datetime import datetime
 
 MQTT_BROKER_LOCAL = "192.168.210.55"
 MQTT_BROKER_PUBLIC = "broker.hivemq.com"
@@ -35,9 +35,11 @@ class MainLoop:
                 weatherData = self.__get_weather_data(predictionTime)
                 formatedWeatherData = self.__format_weather_data(weatherData)
                 formatedNodeData = self.__format_node_data(node_data)
-                final_data = self.__final_format(formatedNodeData, formatedWeatherData)
+                final_data = self.__final_format(
+                    formatedNodeData, formatedWeatherData)
                 print(final_data)
-                p_moisture = self.moisturePredictionModel.Predict(final_data)
+                p_moisture = self.moisturePredictionModel.predictMositure(
+                    final_data)
                 print(p_moisture)
         except Exception as Error:
             raise Error

@@ -37,10 +37,16 @@ class MainLoop:
                 formatedNodeData = self.__format_node_data(node_data)
                 final_data = self.__final_format(
                     formatedNodeData, formatedWeatherData)
+                print("\n")
+                print(
+                    "<----------------------------Preview of Data------------------------------>")
                 print(final_data)
                 p_moisture = self.moisturePredictionModel.predictMositure(
                     final_data)
-                print(p_moisture)
+                print("\n")
+                print("Predicted Soil Moisture --------> ", p_moisture)
+                print("\n\n")
+
         except Exception as Error:
             raise Error
 

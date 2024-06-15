@@ -8,9 +8,11 @@ COLUMN_TRANSFORMER_FILE = "final_model/moisture_pred_columntranformer.joblib"
 
 SCALAR_FILE = "final_model/moisture_pred_minmaxscalar.joblib"
 
-DTR_MODEL = "C:/Users/ganes/OneDrive/Documents/GitHub/Project_LISA/water irrigation/final_model/dtr.bin"
+DTR_MODEL = "C:/Users/ganes/OneDrive/Documents/GitHub/Project_LISA/water irrigation/final_model/models/dtr.bin"
 
 GBR_MODEL = "C:/Users/ganes/OneDrive/Documents/GitHub/Project_LISA/water irrigation/final_model/models/GBR.bin"
+
+
 # column order for sending it to database
 COLUMN_ORDER = [
     "SM_4",
